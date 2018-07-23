@@ -1,0 +1,24 @@
+{
+    "name": "WebRTC_SimpleP2P",
+    "version": "0.0.1",
+    "description": "WebRTC simplest peer to peer hello world including node.js signaling server",
+    "main": "app.js",
+    "author": {
+        "name": "MediaLan GbR <info@medialan.de> (https://www.medialan.de/)",
+        "email": "info@medialan.de"
+    },
+    "scripts": {
+        "start": "node app.js"
+    },
+    "dependencies": {
+        "express": "*",
+        "openssl": "^1.1.0",
+        "pem": "^1.12.5",
+        "socket.io": "1.4.5",
+        "webrtc-adapter": "^6.2.1"
+    },
+    "license": "BSD2",
+    "engines": {
+        "node": "*"
+    }
+}

@@ -1,0 +1,161 @@
+#input-container
+{
+    min-height: 40px;
+    padding-top: 10px;
+}
+
+#con-person-view
+{
+    padding: 10px 0 10px 10px;
+    min-width: 350px;
+    min-height: 90px;
+    background-color: #212529;
+    z-index: 1;
+
+
+    position: relative;
+    margin-left: 0;
+}
+
+#msg-view
+{
+    overflow: auto;
+    overflow-x: hidden;
+
+    min-width: 540px;
+
+    z-index: 0;
+}
+
+.list-group-item
+ {
+     background-color: white;
+     display: table;
+     margin-left: auto;
+
+     margin-top: 5px;
+
+     border-top-left-radius: 60px;
+     border-bottom-left-radius: 60px;
+     border-bottom-right-radius: 60px;
+ }
+
+.list-group-item-left
+{
+    background-color: white;
+    display: table;
+    margin-right: auto;
+
+    margin-top: 5px;
+
+    border-top-right-radius: 60px;
+    border-bottom-left-radius: 60px;
+    border-bottom-right-radius: 60px;
+
+    padding: 0.75rem 1.25rem;
+}
+
+.list-group-item:first-child {
+     border-top-left-radius: 60px;
+    border-top-right-radius: 0;
+}
+
+.list-group-item:last-child {
+
+    border-bottom-right-radius: 60px;
+    border-bottom-left-radius: 60px;
+}
+
+.list-group
+{
+display:table;
+margin-left: auto;
+margin-top: 10px;
+}
+
+.list-group-left
+{
+    display: table;
+    margin-right:auto;
+    margin-top: 10px;
+}
+
+
+
+@media (min-width: 1200px)
+{
+    #msg-view,#input-container {max-width: 3000px;}
+
+}
+
+
+#page-content-wrapper
+{
+    background-color: #212529;
+}
+
+#message-input
+{
+    border: 1px solid rgba(0,0,0,.15);
+    border-radius: .25rem;
+}
+
+#con-person-img
+{
+    width: 80px;
+    height: 80px;
+
+    color: #999999;
+}
+
+.container > a
+{
+
+
+    color: #999999;
+}
+
+
+
+#video-icon
+{
+    color: #999999;
+}
+
+.fa
+{
+    color: #999999;
+}
+
+
+
+#camera-btn
+{
+    margin-left: 10px;
+    cursor: pointer;
+
+    width: 50px;
+    height: 50px;
+}
+
+#phone-btn
+{
+    margin-left: 20px;
+    cursor: pointer;
+
+    width: 50px;
+    height: 50px;
+}
+
+#friendChatLabel{
+    color: white;
+}
+
+html
+{
+    background-color: #212529;
+}
+
+
+
+

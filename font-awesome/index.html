@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title> Welcome to Outs! </title>
+
+
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <link href="css/login.css" rel="stylesheet">
+
+
+    <style>
+        body{
+            background: url("img/background.jpg") no-repeat center center fixed;
+            -webkit-background-size: cover;
+            -moz-background-size: cover;
+            -o-background-size: cover;
+            background-size: cover;
+
+
+        }
+    </style>
+
+
+</head>
+<body>
+
+
+<div class = "container", style = "text-align: center">
+
+    <h1> Welcome to Outs! </h1>
+</div>
+
+<div class="container", style = "margin-top: 10%">
+
+    <form class="form-signin" id="login_form">
+
+        <h2 class="form-signin-heading">Please sign in</h2>
+
+        <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
+
+        <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
+
+        <div class="checkbox">
+            <label>
+                <input type="checkbox" value="remember-me" id="remember"> Remember me
+            </label>
+        </div>
+        <button class="btn btn-lg btn-primary btn-block" type="submit" id="submit">Sign in</button>
+
+
+    </form>
+
+    <h3> No account yet? <a href="register.html">Create a new account.</a> </h3>
+</div> <!-- /container -->
+
+<script src="vendor/jquery/jquery.min.js"></script>
+<script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="js/js.cookie.js"></script>
+<script src="js/auth.js"></script>
+
+<script>
+
+    function escape(unsafe)
+    {
+        return unsafe.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#x27;').replace('/', '&#x2F;');
+
+    }
+
+
+
+
+    $('#login_form').on('submit', function(e) {
+
+        e.preventDefault();
+
+
+        var email= escape($("#inputEmail").val());
+        var password = escape($("#inputPassword").val());
+
+        Cookies.set("Email", email);
+        Cookies.set("Pass", password);
+
+        $.ajax({
+            type: "POST",
+            url: 'bin/login.php',
+            dataType: 'json',
+            data: {
+
+                Email: email,
+                Password: password
+
+            },
+
+
+            success: function (data) {
+
+                var json = JSON.stringify(data);
+
+                window.console.log(data[0]);
+
+                if(data[0] == true)
+                {
+                    loggedUserId = [1];
+
+                    window.location.replace('dashbord.html');
+                }
+
+                else
+                {
+                    window.console.log("Login unsuccessful");
+                }
+
+            },
+            error: function (data)
+            {
+                var json = JSON.stringify(data);
+
+                window.console.log(json);
+
+
+            },
+            async: false
+
+
+
+
+        });
+
+
+
+    });
+
+</script>
+
+
+
+</body>
+</html>

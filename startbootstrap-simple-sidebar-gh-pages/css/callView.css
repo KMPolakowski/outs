@@ -1,0 +1,99 @@
+
+#hangUpBtn
+{
+    cursor: pointer;
+}
+body{
+    overflow: hidden;
+}
+#locvideo
+ {
+
+    min-height:100%;
+    max-height: 100%;
+
+    test-align: center;
+    margin: 0 auto;
+    display: block;
+
+
+ }
+
+#circlewrapper
+{
+    position: absolute;
+    z-index: 5;
+    background-color: #212529;
+    top: 10px;
+    right: 10px;
+    width: 200px;
+    height: 200px;
+    border-radius: 100%;
+    overflow: hidden;
+    display: none;
+}
+
+#locvideowrapper
+{
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 225px;
+    height: 220px;
+    background-color: #212529;
+    z-index: 4;
+    border-bottom-left-radius: 5%;
+    display:none;
+}
+
+#locvideowrapper
+{
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 225px;
+    height: 220px;
+    background-color: #212529;
+    z-index: 4;
+    border-bottom-left-radius: 5%;
+}
+
+#msg-view
+{
+
+    overflow: auto;
+    overflow-x: hidden;
+
+    min-width: 100%;;
+
+    float: right;
+
+    z-index: 1;
+}
+
+#input-container
+{
+    min-width: 100% !important;
+    float: right;
+    z-index: 1;
+    padding-top: 0;
+}
+
+#remvideo
+{
+    min-width: 100%;
+    min-height: 100%;
+
+    position: absolute;
+    z-index: -1;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+}
+
+.list-group-left, .list-group-right
+{
+    margin-top: 0;
+    margin-bottom: 0;
+
+}

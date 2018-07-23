@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title> Dashbord </title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <link href="font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+    <!-- Custom styles for this template -->
+    <link href="css/dashbord.css" rel="stylesheet">
+
+
+
+</head>
+
+<body>
+
+<script src="js/js.cookie.js"></script>
+
+<script src="vendor/jquery/jquery.min.js"></script>
+
+<script src="js/auth.js"></script>
+
+<script>
+    var loggedUserId;
+    auth();
+</script>
+
+
+
+
+
+
+<div id="wrapper">
+
+    <!-- Sidebar -->
+    <div id="sidebar-wrapper">
+
+        <ul class="sidebar-nav" id="userSidebar">
+            <li class="sidebar-brand">
+
+
+
+
+                <img src="" id ="userProfileImg" class="user-thumbnail">
+
+                <a id="userName"></a>
+            </li>
+
+            <div class="container" id="search-input-container">
+
+                <div class="input-group">
+                    <input type="text" class="form-control" id="search-input" placeholder="Find people...">
+
+                </div>
+
+            </div>
+        </ul>
+
+        <ul class="sidebar-nav" id="friends">
+
+
+
+
+
+
+        </ul>
+
+    </div>
+
+
+    <!-- /#sidebar-wrapper -->
+
+    <!-- Page Content -->
+    <div id="page-content-wrapper">
+
+        <div class = "smallSidebar" id="smallSidebar">
+            <a href="#menu-toggle" class="btn btn-primary" id="menu-toggle">  >> </a>
+
+
+        </div>
+
+        <div class="container-fluid" id="call-container">
+            <h1> Welcome to the Dashboard !</h1>
+            <h1>On the left you have your friends. </h1>
+
+        </div>
+    </div>
+    <!-- /#page-content-wrapper -->
+
+
+
+</div>
+
+<div class="callNotification" id="callNotif">
+
+    <img src="img/user.png" class="caller-thumbnail">
+
+
+    <h3> Kamil Polakowski </h3>
+    <a> calling...</a>
+
+    <img src="img/ok.png"  id="acceptCall">
+
+    <img src="img/deny.png"  id="denyCall">
+
+</div>
+
+
+<div class="callNotification" id="dialNotif">
+
+    <a> dialling...</a>
+
+    <img src="img/user.png" class="caller-thumbnail">
+
+
+    <h3> Kamil Polakowski </h3>
+
+
+    <img src="img/deny.png"  id="denyDial">
+
+</div>
+
+
+
+
+<!-- /#wrapper -->
+
+<!-- Bootstrap core JavaScript -->
+
+<script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+<script src="js/loadDashboard.js"></script>
+<script src="js/socket.io.js"></script>
+<script src="js/peopleSearch.js"></script>
+
+
+<audio id="bellTone" src="audio/bell.mp3" autostart="false" ></audio>
+<audio id="dialTone" src="audio/dial.mp3" autostart="false" ></audio>
+<!-- Menu Toggle Script -->
+<script>
+
+    loadDashbord();
+    loadUser();
+
+    checkRequests();
+
+    var callStarted;
+
+    var chatFriendsId;
+    var bell = document.getElementById("bellTone");
+    var dial = document.getElementById("dialTone");
+
+    var callingUser;
+
+
+
+    $("#menu-toggle").click(function(e) {
+        e.preventDefault();
+
+        var className = $('#wrapper').attr('class');
+
+
+        if (className != "toggled") {
+            $('#menu-toggle').text("<<");
+        }
+        else {
+            $('#menu-toggle').text(">>");
+        }
+
+        $("#wrapper").toggleClass("toggled");
+
+    });
+
+
+        var SignalingServer = {
+            socket  : null,
+            Connect : function (cb) {
+
+                this.socket = io.connect("https://ec2-54-93-235-16.eu-central-1.compute.amazonaws.com:3000");
+
+
+                this.socket.on('callRequest', function(Id) {
+
+                    callRequested(Id);
+
+
+            });
+
+                this.socket.on('chatMsg', function(msg, originUserId)
+                {
+                    if(originUserId == chatFriendsId)
+                    {
+                        $("#msg-view").append
+                        ("<ul class='list-group-left'><li class='list-group-item-left'>" + msg + "</li> </ul>");
+                        sound.play();
+
+
+                        var scroll = document.getElementById('msg-view');
+                        scroll.scrollTop = scroll.scrollHeight;
+
+                    }
+
+                });
+
+                this.socket.on('msg', function(msg)
+                {
+                    if(msg == "callAccepted") {
+                        Dial();
+
+                        $("#circlewrapper").css("display", "block");
+
+                        $("#dialNotif").toggle();
+                        dial.pause();
+
+                        callStarted = true;
+                        $("#phone-btn").replaceWith("<img src='img/deny.png' id='hangUpBtn' class='person-thumbnail'>");
+
+
+
+                        $("#hangUpBtn").click(function(e) {
+
+                            hangUp();
+                            $("#circlewrapper").css("display", "none");
+
+                        });
+
+                    }
+
+                    if(msg == 'dialDenied')
+                    {
+
+                        callStop();
+
+                    }
+
+                    if(msg == 'callDenied')
+                    {
+                        dialStop();
+                    }
+
+                    if(msg == 'hangedUp')
+                    {
+                        hangedUp();
+                    }
+
+                    cb(msg);
+                });
+
+
+            },
+            Send    : function(msg) { this.socket.emit('msg',msg); },
+            Call    : function()    {this.socket.emit('call', chatFriendsId, loggedUserId)},
+            Subscribe: function(loggedUserId) {this.socket.emit('subscribe', loggedUserId )},
+            StoreClientId: function(loggedUSerId) {this.socket.emit('storeClientId', loggedUSerId)},
+            SendChatMsg: function(targetUserId, msg, originUserId) {this.socket.emit('chatMsg', targetUserId, msg, originUserId)}
+
+        }
+
+        function hangedUp()
+        {
+            pc.close();
+            callStarted = false;
+
+            $('#call-container').load('callView.html');
+
+
+            SignalingServer.Subscribe(loggedUserId);
+            SignalingServer.Subscribe(loggedUserId);
+            $('.sidebar-nav > li > a').css('pointer-events','inherit');
+
+
+        }
+
+
+        function hangUp()
+        {
+            pc.close();
+            callStarted = false;
+
+
+            $('#call-container').load('callView.html');
+
+            SignalingServer.Send('hangedUp');
+
+            SignalingServer.Subscribe(loggedUserId);
+            SignalingServer.Subscribe(loggedUserId);
+            $('.sidebar-nav > li > a').css('pointer-events','inherit');
+
+
+
+        }
+
+    var pc = new RTCPeerConnection({ iceServers: [
+        { urls: "stun:stun.l.google.com:19302"},
+        {
+            "urls": [
+                "turn:13.250.13.83:3478?transport=udp"
+            ],
+            "username": "YzYNCouZM1mhqhmseWk6",
+            "credential": "YzYNCouZM1mhqhmseWk6"
+        }
+    ] });
+
+    function Dial() {
+
+        pc.createOffer().then(function(offer) {
+            return pc.setLocalDescription(offer);
+        })
+            .then(function() {
+                SignalingServer.Send(pc.localDescription);
+                //window.console.log(pc.localDescription);
+            })
+
+            .catch(function(reason) {
+                console.log(reason);
+                // An error occurred, so handle the failure to connect
+            });
+
+    };
+
+    function Answer()
+    {
+        pc.createAnswer().then(function(answer) {
+            return pc.setLocalDescription(answer);
+        })
+            .then(function() {
+                SignalingServer.Send(pc.localDescription);
+            })
+            .catch(function(error)
+            {
+                console.log(error);
+            });
+    }
+
+
+
+    function onSignaling(msg) {
+
+        window.console.log("msg" + msg.type);
+        window.console.log('Conn State: ' + pc.iceConnectionState);
+
+
+
+        if(msg.sdp)
+        {
+            pc.setRemoteDescription(msg).then(function()
+            {
+                if(msg.type == "offer")
+                {
+                    Answer();
+                }
+            });
+
+        }
+        else if(msg.candidate)
+        {
+            window.console.log("GOT CANDIDATE MAN");
+            pc.addIceCandidate(msg);
+        }
+
+    }
+
+    $('#acceptCall').click(function()
+    {
+        friendsName = $('#' + callingUser).text();
+
+        chatFriendsId = callingUser;
+
+        callStarted = true;
+
+        $('#call-container').load('callView.html');
+
+
+        SignalingServer.Send('callAccepted');
+        $("#callNotif").toggle();
+        bell.pause();
+
+    });
+
+    $('#denyCall').click(function()
+    {
+        $("#callNotif").toggle();
+        bell.pause();
+        SignalingServer.Send("callDenied");
+        //SignalingServer.Subscribe(loggedUserId);
+        $("#phone-btn").toggle();
+        $('.sidebar-nav > li > a').css('pointer-events','inherit');
+
+
+    });
+
+
+    $('#denyDial').click(function() {
+
+        $("#dialNotif").toggle();
+        $("#phone-btn").toggle();
+        dial.pause();
+        SignalingServer.Send("dialDenied");
+
+        $('.sidebar-nav > li > a').css('pointer-events','inherit');
+
+        SignalingServer.Subscribe(loggedUserId);
+    });
+
+        function callRequested(Id)
+        {
+
+            callingUser = Id;
+            $("#callNotif > h3").text($("#" + callingUser).text());
+            $("#callNotif").toggle();
+            $("#phone-btn").toggle();
+
+            $('.sidebar-nav > li > a').css('pointer-events', 'none');
+
+
+            bell.play();
+        }
+
+        function callStop()
+        {
+
+            $("#callNotif").toggle();
+            $("#phone-btn").toggle();
+            $('.sidebar-nav > li > a').css('pointer-events','inherit');
+            bell.pause();
+        }
+
+        function dialStop()
+        {
+
+            $("#dialNotif").toggle();
+            $("#phone-btn").toggle();
+            $('.sidebar-nav > li > a').css('pointer-events','inherit');
+            dial.pause();
+            SignalingServer.Subscribe(loggedUserId);
+            SignalingServer.Subscribe(loggedUserId);
+        }
+
+
+    SignalingServer.Connect(onSignaling);
+    SignalingServer.Subscribe(loggedUserId);
+    SignalingServer.StoreClientId(loggedUserId);
+
+
+
+
+
+
+</script>
+
+</body>
+
+</html>

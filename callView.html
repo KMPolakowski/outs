@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title> Chat </title>
+
+    <link href="font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+    <!-- Bootstrap core CSS -->
+    <link href="vendor/bootstrap/css/bootstrap.css" rel="stylesheet">
+
+
+
+
+    <!-- Custom styles for this template -->
+
+
+
+    <link href="css/dashbord.css" rel="stylesheet">
+
+    <link href="css/chat.css" rel="stylesheet">
+
+    <link href="css/callView.css" rel="stylesheet">
+
+
+
+
+
+
+</head>
+
+<body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.js"></script>
+<script src="vendor/jquery/jquery.min.js"></script>
+<script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="js/loadChat.js"></script>
+
+
+
+<div class="container" id="con-person-view">
+
+    <a id="friendChatLabel">  </a>
+
+
+    <img src="img/phone.png" id="phone-btn" class="person-thumbnail">
+
+    <!-- <img src="img/camera.png" id="camera-btn" class="person-thumbnail">
+-->
+
+</div>
+
+
+
+
+<!-- <button id="dialButton">Dial</button><br /><br />
+//<p>local video</p> -->
+<video id="remvideo" autoplay="autoplay" ></video>
+
+
+<div id="circlewrapper">
+    <video id="locvideo" autoplay="autoplay" muted="muted" ></video>
+</div>
+
+
+
+<audio id="audio" src="audio/water%20drop.mp3" autostart="false" ></audio>
+
+
+
+<div class="container" id="msg-view">
+
+
+</div>
+
+
+<div class="container" id="input-container">
+
+    <div class="input-group">
+        <input type="text" class="form-control" id="message-input" placeholder="Your message...">
+
+    </div>
+
+</div>
+
+
+
+
+
+
+<script>
+
+    $('#msg-view').height($(this).height()-150);
+    $(window).on('resize', function()
+    {
+        $('#msg-view').height($(this).height()-150);
+    });
+
+    if(callStarted)
+    {
+        $("#phone-btn").replaceWith("<img src='img/deny.png' id='hangUpBtn' class='person-thumbnail'>");
+        $("#circlewrapper").css("display", "block");
+
+
+        $("#hangUpBtn").click(function(e) {
+
+            callStarted = false;
+
+            $('#call-container').load('callView.html');
+
+            SignalingServer.Send('hangedUp');
+
+            SignalingServer.Subscribe(loggedUserId);
+            SignalingServer.Subscribe(loggedUserId);
+        });
+
+
+    }
+
+
+
+    var scroll = document.getElementById('msg-view');
+
+
+    var sound = document.getElementById("audio");
+
+    var friendsName;
+
+
+
+
+
+    $("#message-input").keydown(function(event) {
+
+        var input = escape($("#message-input").val());
+
+        if (event.which == 13) {
+
+
+            if(input != "" & jQuery.trim(input).length != 0) {
+
+                SignalingServer.SendChatMsg(chatFriendsId, input, loggedUserId);
+                $("#msg-view").append("<ul class = 'list-group'><li class='list-group-item'>" + input + "</li> </ul>");
+                $("#message-input").val("");
+                scroll.scrollTop = scroll.scrollHeight;
+
+            }
+
+
+        }
+
+    });
+
+    function escape(unsafe)
+    {
+        return unsafe.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#x27;').replace('/', '&#x2F;');
+
+    }
+
+
+
+    navigator.getUserMedia = ( navigator.getUserMedia ||
+    navigator.webkitGetUserMedia ||
+    navigator.mozGetUserMedia ||
+    navigator.msGetUserMedia);
+
+    // Just add audio to stream audio too
+
+    navigator.getUserMedia({ video: true, audio: true},
+        function (stream) {
+            //$("#locvideo").attr("src", window.URL.createObjectURL(stream));
+            document.getElementById("locvideo").srcObject = stream;
+
+            pc.addStream(stream);
+        },
+        function () { console.log("No Media"); }
+    );
+
+
+
+
+    function preDial()
+    {
+        SignalingServer.Call();
+
+
+    }
+
+
+
+
+
+
+
+        $("#phone-btn").click(function(e) {
+
+            preDial();
+
+            dial.play();
+
+            $("#dialNotif > h3").text($("#" + chatFriendsId).text());
+            $('.sidebar-nav > li > a').css('pointer-events','none');
+
+            $("#dialNotif").toggle();
+            $("#phone-btn").toggle();
+
+        });
+
+
+
+
+
+
+
+
+
+</script>
+
+
+
+</body>
+
+</html>
