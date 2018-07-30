@@ -4,8 +4,8 @@
     "description": "WebRTC simplest peer to peer hello world including node.js signaling server",
     "main": "app.js",
     "author": {
-        "name": "MediaLan GbR <info@medialan.de> (https://www.medialan.de/)",
-        "email": "info@medialan.de"
+        "name": "",
+        "email": ""
     },
     "scripts": {
         "start": "node app.js"

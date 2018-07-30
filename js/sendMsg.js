@@ -3,8 +3,7 @@
  */
 
 
-function sendMsg(msg)
-{
+function sendMsg(msg) {
 
 
     $.ajax({
@@ -26,22 +25,18 @@ function sendMsg(msg)
 
             window.console.log(json);
 
-            if(data == 1)
-            {
+            if (data == 1) {
 
 
                 scroll.scrollTop = scroll.scrollHeight;
 
-            }
-            else
-            {
+            } else {
                 window.alert("Ups! Something went wrong")
             }
 
 
         },
-        error: function (errMsg)
-        {
+        error: function (errMsg) {
             var json = JSON.stringify(errMsg);
 
             window.console.log(json);
@@ -51,5 +46,3 @@ function sendMsg(msg)
 
     });
 };
-
-

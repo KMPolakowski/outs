@@ -37,7 +37,7 @@ if(isset($firstName, $lastName, $email, $password, $male))
     $query = $pdoConnection->prepare($sql);
     $query->execute([$email]);
 
-    if($query->rowCount() == 0) {
+    if($query->rowCount() < 1) {
 
         $sql = "INSERT INTO u_users (u_firstname, u_lastname, u_email, u_password, u_male)
 VALUES(:firstName, :lastName, :email, :password, :male)";
@@ -52,7 +52,7 @@ VALUES(:firstName, :lastName, :email, :password, :male)";
     }
 
     else{
-        echo json_encode(false);
+        echo json_encode($query->rowCount());
     }
 }
 

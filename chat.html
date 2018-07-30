@@ -18,10 +18,6 @@
 
 
 
-    <!-- Custom styles for this template -->
-
-
-
     <link href="css/dashbord.css" rel="stylesheet">
 
     <link href="css/chat.css" rel="stylesheet">
@@ -35,110 +31,106 @@
 
 <body>
 
-<script src="vendor/jquery/jquery.min.js"></script>
-<script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-<script src="js/loadChat.js"></script>
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="js/loadChat.js"></script>
 
-<div id ="call-container">
-
-
-<div class="container" id="con-person-view">
-
-    <a id="friendChatLabel">  </a>
+    <div id="call-container">
 
 
-    <img src="img/phone.png" id="phone-btn" class="person-thumbnail">
+        <div class="container" id="con-person-view">
 
-    <img src="img/camera.png" id="camera-btn" class="person-thumbnail">
-
-
+            <a id="friendChatLabel"> </a>
 
 
-</div>
+            <img src="img/phone.png" id="phone-btn" class="person-thumbnail">
+
+            <img src="img/camera.png" id="camera-btn" class="person-thumbnail">
 
 
 
 
-    <div class="container" id="msg-view">
+        </div>
 
 
 
+
+        <div class="container" id="msg-view">
+
+
+
+
+        </div>
+
+
+        <div class="container" id="input-container">
+
+            <div class="input-group">
+                <input type="text" class="form-control" id="message-input" placeholder="Your message...">
+
+            </div>
+
+        </div>
 
     </div>
 
 
-       <div class="container" id="input-container">
-
-           <div class="input-group">
-               <input type="text" class="form-control" id="message-input" placeholder="Your message...">
-
-           </div>
-
-       </div>
-
-</div>
 
 
 
+    <script src="js/sendMsg.js"></script>
+
+    <audio id="audio" src="audio/water%20drop.mp3" autostart="false"></audio>
+
+    <script>
+        var sound = document.getElementById("audio");
+
+        var scroll = document.getElementById('msg-view');
 
 
-<script src="js/sendMsg.js"></script>
-
-<audio id="audio" src="audio/water%20drop.mp3" autostart="false" ></audio>
-
-<script>
-    var sound = document.getElementById("audio");
-
-    var scroll = document.getElementById('msg-view');
-
-
-    var friendsName;
+        var friendsName;
 
 
 
-    $("#phone-btn").click(function(e) {
+        $("#phone-btn").click(function (e) {
 
-        $('#call-container').load('callView.html');
-
-
-    });
-
-    $("#camera-btn").click(function(e) {
-        e.preventDefault();
-        alert("Video call started")
-    });
+            $('#call-container').load('callView.html');
 
 
-    $( "#message-input" ).keydown(function( event ) {
+        });
 
-        var input = $("#message-input").val();
-        var escapedInput = escape(input);
+        $("#camera-btn").click(function (e) {
+            e.preventDefault();
+            alert("Video call started")
+        });
 
-        if (event.which == 13) {
+
+        $("#message-input").keydown(function (event) {
+
+            var input = $("#message-input").val();
+            var escapedInput = escape(input);
+
+            if (event.which == 13) {
 
 
-            if(escapedInput != "" & jQuery.trim(escapedInput).length != 0) {
+                if (escapedInput != "" & jQuery.trim(escapedInput).length != 0) {
 
-                sendMsg(escapedInput);
-                $("#message-input").val("");
+                    sendMsg(escapedInput);
+                    $("#message-input").val("");
+                }
+
+
             }
 
+        });
+
+
+        function escape(unsafe) {
+            return unsafe.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(
+                /'/g, '&#x27;').replace('/', '&#x2F;');
 
         }
-
-    });
-
-
-    function escape(unsafe)
-    {
-        return unsafe.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#x27;').replace('/', '&#x2F;');
-
-    }
-
-
-
-
-</script>
+    </script>
 
 
 

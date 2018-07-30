@@ -1,59 +1,50 @@
+function auth() {
+
+    var email = Cookies.get("Email");
+    var password = Cookies.get("Pass");
 
 
-function auth()
-{
+    $.ajax({
+        type: "POST",
+        url: 'bin/login.php',
+        dataType: 'json',
+        data: {
 
-var email = Cookies.get("Email");
-var password = Cookies.get("Pass");
+            Email: email,
+            Password: password
 
-
-$.ajax({
-    type: "POST",
-    url: 'bin/login.php',
-    dataType: 'json',
-    data: {
-
-        Email: email,
-        Password: password
-
-    },
+        },
 
 
-    success: function (data) {
+        success: function (data) {
 
-        var json = JSON.stringify(data);
+            var json = JSON.stringify(data);
 
 
-        window.console.log(json);
+            window.console.log(json);
 
-        if(data[0] == true)
-        {
-            loggedUserId = data[1];
-        }
+            if (data[0] == true) {
+                loggedUserId = data[1];
+            } else {
+                window.location.replace('index.html');
+            }
 
-        else
-        {
-            //window.alert(data);
+        },
+        error: function (data) {
+
+            var json = JSON.stringify(data);
+
+            window.console.log(json);
+
             window.location.replace('index.html');
-        }
-
-    },
-    error: function (data)
-    {
-
-        var json = JSON.stringify(data);
-
-        window.console.log(json);
-
-        window.location.replace('index.html');
 
 
-    },
-    async: false
+        },
+        async: false
 
 
 
 
-});
+    });
 
 }

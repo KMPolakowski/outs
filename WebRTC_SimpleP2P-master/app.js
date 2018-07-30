@@ -1,17 +1,16 @@
-﻿var fs      = require("fs");
-var http   = require("https");
+﻿var fs = require("fs");
+var http = require("https");
 var express = require("express");
-var io      = require("socket.io");
+var io = require("socket.io");
 
 
 // setup https express WebServer and WebSocket Server
 var app = express();
-var webServer = http.createServer(
-    {
-        key  : fs.readFileSync("/etc/pki/tls/private/localhost.key"),
-        cert : fs.readFileSync("/etc/pki/tls/certs/localhost.crt"),
-        rejectUnauthorized: false
-    }, app).listen(3000);
+var webServer = http.createServer({
+    key: fs.readFileSync("/etc/pki/tls/private/localhost.key"),
+    cert: fs.readFileSync("/etc/pki/tls/certs/localhost.crt"),
+    rejectUnauthorized: false
+}, app).listen(3000);
 
 app.use(function (req, res, next) {
 
@@ -42,19 +41,17 @@ var clients = [];
 
 SocketServer.on('connection', function (socket) {
 
-    socket.on('storeClientId', function(customId)
-    {
+    socket.on('storeClientId', function (customId) {
 
-    var clientInfo = new Object();
-    clientInfo.customId = customId;
-    clientInfo.socketId = socket.id;
-    clients.push(clientInfo);
-    console.log('New client available');
+        var clientInfo = new Object();
+        clientInfo.customId = customId;
+        clientInfo.socketId = socket.id;
+        clients.push(clientInfo);
+        console.log('New client available');
     });
 
-    socket.on('disconnect', function(data)
-    {
-        for( var i=0, len=clients.length; i<len; ++i ) {
+    socket.on('disconnect', function (data) {
+        for (var i = 0, len = clients.length; i < len; ++i) {
             var c = clients[i];
 
             if (c.socketId == socket.id) {
@@ -64,32 +61,29 @@ SocketServer.on('connection', function (socket) {
         }
     });
 
-    socket.on('chatMsg', function(targetUserId, msg, originUserId)
-    {
+    socket.on('chatMsg', function (targetUserId, msg, originUserId) {
         var targetSocket;
 
-        for( var i=0; i < clients.length; ++i ) {
+        for (var i = 0; i < clients.length; ++i) {
 
             if (clients[i].customId == targetUserId) {
-                 targetSocket = clients[i];
+                targetSocket = clients[i];
             }
         }
 
-        if(typeof targetSocket !== 'undefined')
-        {
-          socket.to(targetSocket.socketId).emit('chatMsg', msg, originUserId);
+        if (typeof targetSocket !== 'undefined') {
+            socket.to(targetSocket.socketId).emit('chatMsg', msg, originUserId);
         }
     });
 
 
 
-    socket.on('subscribe', function(room)
-    {
+    socket.on('subscribe', function (room) {
 
         socket.leave(this.room);
-        console.log('leaving room' + this.room);
+        console.log(socket.id + 'leaving room' + this.room);
         this.room = room;
-        console.log('joining room:', this.room);
+        console.log(socket.id + 'joining room:', this.room);
         console.log('socket id: ' + socket.id);
 
 
@@ -104,8 +98,7 @@ SocketServer.on('connection', function (socket) {
         socket.to(this.room).emit('msg', msg);
     });
 
-    socket.on('call', function(friend, user)
-    {
+    socket.on('call', function (friend, user) {
         socket.join(friend);
         this.room = friend;
         socket.to(friend).emit('callRequest', user);

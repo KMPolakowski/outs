@@ -6,10 +6,10 @@
  * Time: 18:58
  */
 
-$host = 'outs.cvvynhgepn62.eu-central-1.rds.amazonaws.com';
+$host = 'outsdb.cvvynhgepn62.eu-central-1.rds.amazonaws.com';
 $user = 'admin';
-$password = 'Blyatmobil';
-$dbname = 'outs';
+$password = '12345678';
+$dbname = 'outsdb';
 
 
 $dsn = 'mysql:host='.$host.';dbname='.$dbname;
