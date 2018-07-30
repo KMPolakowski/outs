@@ -6,7 +6,7 @@ You can check it out here: https://ec2-54-93-191-148.eu-central-1.compute.amazon
 <ul>
 <li>custom js/PHP login/register</li>
 <li>Searching for and requesting people to become friends.</li>
-<li>Chat</li>
+<li>Live Text Chat</li>
 <li>Video+Audio Call</li>
 </ul>
 <p><span style="font-size: 12pt;">Note Bugs:</span></p>
