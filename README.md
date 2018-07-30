@@ -11,7 +11,8 @@ You can check it out here: https://ec2-54-93-191-148.eu-central-1.compute.amazon
 </ul>
 <p><span style="font-size: 12pt;">Note Bugs:</span></p>
 <ul>
-<li>The video+audio call works on a local network and in case of success only the calee's video+audio is transmitted to the caller (not both ways). </li>
+<li>The video+audio call works on a local network pretty well.  </li>
+  <li>In case a call is successfull only the calee's video+audio is transmitted to the caller (not the other way around). </li>
   <li> The Video+Audio call will work through the internet when tried multiple times. </li>
   <li> When two peers are engaing in a call and a third user tries to reach one of them the whole thing goes busted. </li>
 <li> These Bugs have not been corrected because I don't have any more time for this learning project.</li>
