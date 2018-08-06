@@ -1,6 +1,6 @@
 <p style="text-align: center;"><span style="font-size: 20pt;"><strong>TradeCryptos</strong></span></p>
 <p><span style="font-size: 10pt;">Video/Audio P2P Chat ("Skype in browser") using WebRTC API, Node.js, socket.io, PHP.</span></p>
-You can check it out here: https://ec2-54-93-191-148.eu-central-1.compute.amazonaws.com
+
 <p>&nbsp;</p>
 <p><span style="font-size: 12pt;">Features:</span></p>
 <ul>
