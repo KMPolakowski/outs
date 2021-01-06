@@ -1,4 +1,3 @@
-<p style="text-align: center;"><span style="font-size: 20pt;"><strong>TradeCryptos</strong></span></p>
 <p><span style="font-size: 10pt;">Video/Audio P2P Chat ("Skype in browser") using WebRTC API, Node.js, socket.io, PHP.</span></p>
 
 <p>&nbsp;</p>
