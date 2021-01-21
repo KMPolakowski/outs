@@ -14,7 +14,7 @@
         "express": "*",
         "openssl": "^1.1.0",
         "pem": "^1.12.5",
-        "socket.io": "1.4.5",
+        "socket.io": "2.4.0",
         "webrtc-adapter": "^6.2.1"
     },
     "license": "BSD2",
